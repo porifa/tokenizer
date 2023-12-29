@@ -10,6 +10,14 @@
         "regex-tokenizer",
         "porifa-tokenizer"
     ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/porifa/tokenizer.git"
+    },
+    "bugs": {
+        "url": "https://github.com/porifa/tokenizer/issues"
+    },
+    "homepage": "https://github.com/porifa/tokenizer",
     "author": {
         "name": "Aamir Sohail",
         "email": "AamirSohailKmAs@gmail.com"
