@@ -1,0 +1,25 @@
+{
+    "name": "@porifa/tokenizer",
+    "version": "0.0.1",
+    "description": "Regex Based Tokenizer used in parsers developed by Porifa",
+    "main": "./out/index.js",
+    "types": "./out/index.d.ts",
+    "keywords": [
+        "tokenizer",
+        "scanner",
+        "regex-tokenizer",
+        "porifa-tokenizer"
+    ],
+    "author": {
+        "name": "Aamir Sohail",
+        "email": "AamirSohailKmAs@gmail.com"
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "rm -rf dist && tsc",
+        "watch": "tsc -b -w"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.3"
+    }
+}
