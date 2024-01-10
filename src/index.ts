@@ -71,7 +71,7 @@ export class Tokenizer<TokenKind> {
             return null;
         }
 
-        let kind: TokenKind | undefined = definition.kind ?? definition.tokenMap[matches[0]];
+        let kind: TokenKind | undefined = definition.kind ?? definition.tokenMap[matches[0].toLowerCase()];
 
         if (kind === undefined) {
             kind = this._unknown;
