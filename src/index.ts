@@ -31,13 +31,13 @@ export class Tokenizer<TokenKind> {
         private _tokenDefinitions: TokenDefinition<TokenKind>[],
         private _skippables: TokenKind[],
         private _endOfFile: TokenKind,
-        private _unknown: TokenKind
+        private _unrecognized: TokenKind
     ) {}
 
-    setInput(code: string) {
+    setInput(code: string, offset: number = 0) {
         this._code = code;
-        this._length = code.length;
-        this._position = 0;
+        this._length = offset + code.length;
+        this._position = offset;
     }
 
     nextToken(): Token<TokenKind> {
@@ -61,7 +61,7 @@ export class Tokenizer<TokenKind> {
         }
         const pos = this._position;
         this._position++;
-        return Token.create(this._unknown, pos, this._position - pos);
+        return Token.create(this._unrecognized, pos, this._position - pos);
     }
 
     private _regexMatch(definition: TokenDefinition<TokenKind>): Token<TokenKind> | null {
@@ -74,7 +74,7 @@ export class Tokenizer<TokenKind> {
         let kind: TokenKind | undefined = definition.kind ?? definition.tokenMap[matches[0].toLowerCase()];
 
         if (kind === undefined) {
-            kind = this._unknown;
+            kind = this._unrecognized;
         }
 
         const pos = this._position;
