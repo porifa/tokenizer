@@ -1,6 +1,6 @@
 {
     "name": "@porifa/tokenizer",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Regex Based Tokenizer used in parsers developed by Porifa",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
