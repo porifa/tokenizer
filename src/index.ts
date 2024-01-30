@@ -34,9 +34,12 @@ export class Tokenizer<TokenKind> {
         private _unrecognized: TokenKind
     ) {}
 
-    setInput(code: string, offset: number = 0) {
+    setInput(code: string) {
         this._code = code;
-        this._length = offset + code.length;
+        this._length = code.length;
+    }
+
+    setOffset(offset: number) {
         this._position = offset;
     }
 
