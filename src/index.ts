@@ -96,6 +96,18 @@ export class Tokenizer<TokenKind> {
         return '';
     }
 
+    advanceUntilRegex(regex: RegExp) {
+        const str = this._code.substring(this._position);
+        const match = str.match(regex);
+        if (match) {
+            this._position = this._position + match.index!;
+            return match.index!;
+        }
+        const pos = this._position;
+        this._position = this._length;
+
+        return this._length - pos;
+    }
 
     private _regexMatch(definition: TokenDefinition<TokenKind>): Token<TokenKind> | null {
         const matches = this._code.substring(this._position).match(definition.regex);
