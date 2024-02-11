@@ -43,8 +43,13 @@ export class Tokenizer<TokenKind> {
         this._position = offset;
     }
 
+    isEndOfFile(): boolean {
+        return this._position >= this._length;
+    }
+
+
     nextToken(): Token<TokenKind> {
-        if (this._position >= this._length) {
+        if (this.isEndOfFile()) {
             return Token.create(this._endOfFile, this._position, this._length - this._position);
         }
 
