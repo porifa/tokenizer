@@ -86,6 +86,17 @@ export class Tokenizer<TokenKind> {
         return Token.create(this._unrecognized, pos, this._position - pos);
     }
 
+    advanceIfRegex(regex: RegExp): string {
+        const str = this._code.substring(this._position);
+        const match = str.match(regex);
+        if (match) {
+            this._position = this._position + match.index! + match[0].length;
+            return match[0];
+        }
+        return '';
+    }
+
+
     private _regexMatch(definition: TokenDefinition<TokenKind>): Token<TokenKind> | null {
         const matches = this._code.substring(this._position).match(definition.regex);
 
