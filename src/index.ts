@@ -1,18 +1,22 @@
 'use strict';
 
+type triviaDataType = { lastSkippable?: boolean };
+
 export class Token<TokenKind> {
     public kind: TokenKind;
     public start: number;
     public length: number;
+    public triviaData?: triviaDataType;
 
-    constructor(kind: TokenKind, start: number, length: number) {
+    constructor(kind: TokenKind, start: number, length: number, triviaData?: triviaDataType) {
         this.kind = kind;
         this.start = start;
         this.length = length;
+        this.triviaData = triviaData;
     }
 
-    public static create<TokenKind>(kind: TokenKind, start: number, length: number) {
-        return new Token(kind, start, length);
+    public static create<TokenKind>(kind: TokenKind, start: number, length: number, triviaData?: triviaDataType) {
+        return new Token(kind, start, length, triviaData);
     }
 
     public getText(source: string) {
@@ -26,6 +30,7 @@ export class Tokenizer<TokenKind> {
     private _code: string = '';
     private _length: number = 0;
     private _position: number = 0;
+    private _lastSkippable: Token<TokenKind> | null = null;
 
     constructor(
         private _tokenDefinitions: TokenDefinition<TokenKind>[],
@@ -76,7 +81,13 @@ export class Tokenizer<TokenKind> {
             }
 
             if (this._isSkippable(match.kind)) {
+                this._lastSkippable = match;
                 return this.nextToken();
+            }
+
+            if (this._lastSkippable !== null) {
+                match.triviaData = { lastSkippable: true };
+                this._lastSkippable = null;
             }
 
             return match;
