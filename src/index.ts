@@ -47,6 +47,20 @@ export class Tokenizer<TokenKind> {
         return this._position >= this._length;
     }
 
+    peekToken(upto: number = 1): Token<TokenKind> {
+        const pos = this._position;
+        let token = this.nextToken();
+
+        for (let i = 1; i < upto; i++) {
+            token = this.nextToken();
+            if (token.kind === this._endOfFile) {
+                break;
+            }
+        }
+
+        this.setOffset(pos);
+        return token;
+    }
 
     nextToken(): Token<TokenKind> {
         if (this.isEndOfFile()) {
