@@ -15,10 +15,6 @@ export class Token<TokenKind> {
         this.triviaData = triviaData;
     }
 
-    public static create<TokenKind>(kind: TokenKind, start: number, length: number, triviaData?: triviaDataType) {
-        return new Token(kind, start, length, triviaData);
-    }
-
     public getText(source: string) {
         return source.substring(this.start, this.start + this.length);
     }
