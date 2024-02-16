@@ -3,3 +3,5 @@ tests/
 src/
 package-lock.json
 tsconfig.json
+.editorconfig
+.prettierrc
