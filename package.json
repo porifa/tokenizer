@@ -25,7 +25,7 @@
     "license": "MIT",
     "scripts": {
         "build": "rm -rf dist && tsc",
-        "prepublishOnly": "build",
+        "prepublishOnly": "rm -rf dist && tsc",
         "watch": "tsc -b -w"
     },
     "devDependencies": {
