@@ -20,7 +20,7 @@ export class Token<TokenKind, triviaType extends triviaDataType = {}> {
     }
 }
 
-type TokenDefinition<TokenKind> = { kind?: TokenKind; regex: RegExp; tokenMap: Record<string, TokenKind> };
+type TokenDefinition<TokenKind> = { regex: RegExp; kind?: TokenKind; tokenMap: Record<string, TokenKind> };
 
 export class Tokenizer<TokenKind, triviaType extends triviaDataType = {}> {
     private _code: string = '';

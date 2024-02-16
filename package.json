@@ -1,6 +1,6 @@
 {
     "name": "@porifa/tokenizer",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Regex Based Tokenizer used in parsers developed by Porifa",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -25,6 +25,7 @@
     "license": "MIT",
     "scripts": {
         "build": "rm -rf dist && tsc",
+        "prepublishOnly": "build",
         "watch": "tsc -b -w"
     },
     "devDependencies": {
