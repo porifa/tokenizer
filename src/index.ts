@@ -1,14 +1,14 @@
 'use strict';
 
-type triviaDataType = { lastSkippable?: boolean };
+export type triviaDataType = { text?: string; lastSkippable?: boolean };
 
-export class Token<TokenKind> {
+export class Token<TokenKind, triviaType extends triviaDataType = {}> {
     public kind: TokenKind;
     public start: number;
     public length: number;
-    public triviaData?: triviaDataType;
+    public triviaData?: triviaType;
 
-    constructor(kind: TokenKind, start: number, length: number, triviaData?: triviaDataType) {
+    constructor(kind: TokenKind, start: number, length: number, triviaData?: triviaType) {
         this.kind = kind;
         this.start = start;
         this.length = length;
@@ -22,7 +22,7 @@ export class Token<TokenKind> {
 
 type TokenDefinition<TokenKind> = { kind?: TokenKind; regex: RegExp; tokenMap: Record<string, TokenKind> };
 
-export class Tokenizer<TokenKind> {
+export class Tokenizer<TokenKind, triviaType extends triviaDataType = {}> {
     private _code: string = '';
     private _length: number = 0;
     private _position: number = 0;
@@ -32,23 +32,27 @@ export class Tokenizer<TokenKind> {
         private _tokenDefinitions: TokenDefinition<TokenKind>[],
         private _skippables: TokenKind[],
         private _endOfFile: TokenKind,
-        private _unrecognized: TokenKind
+        private _unrecognized: TokenKind,
+        private _triviaFunction?: (
+            matchedToken: Token<TokenKind>,
+            tokenizer: Tokenizer<TokenKind, triviaType>
+        ) => triviaType
     ) {}
 
-    setInput(code: string) {
+    public setInput(code: string) {
         this._code = code;
         this._length = code.length;
     }
 
-    setOffset(offset: number) {
+    public setOffset(offset: number) {
         this._position = offset;
     }
 
-    isEndOfFile(): boolean {
+    public isEndOfFile(): boolean {
         return this._position >= this._length;
     }
 
-    peekToken(upto: number = 1): Token<TokenKind> {
+    public peekToken(upto: number = 1): Token<TokenKind> {
         const pos = this._position;
         let token = this.nextToken();
 
@@ -63,14 +67,13 @@ export class Tokenizer<TokenKind> {
         return token;
     }
 
-    nextToken(): Token<TokenKind> {
+    public nextToken(): Token<TokenKind> {
         if (this.isEndOfFile()) {
             return new Token(this._endOfFile, this._position, this._length - this._position);
         }
 
         for (const tokenDefinition of this._tokenDefinitions) {
-            let match: Token<TokenKind> | null = null;
-            match = this._regexMatch(tokenDefinition);
+            const match: Token<TokenKind> | null = this._regexMatch(tokenDefinition);
 
             if (match === null) {
                 continue;
@@ -81,19 +84,24 @@ export class Tokenizer<TokenKind> {
                 return this.nextToken();
             }
 
+            if (this._triviaFunction) {
+                match.triviaData = this._triviaFunction(match, this);
+            }
+
             if (this._lastSkippable !== null) {
-                match.triviaData = { lastSkippable: true };
                 this._lastSkippable = null;
             }
 
             return match;
         }
+
         const pos = this._position;
         this._position++;
+
         return new Token(this._unrecognized, pos, this._position - pos);
     }
 
-    advanceIfRegex(regex: RegExp): string {
+    public advanceIfRegex(regex: RegExp): string {
         const str = this._code.substring(this._position);
         const match = str.match(regex);
         if (match) {
@@ -103,7 +111,7 @@ export class Tokenizer<TokenKind> {
         return '';
     }
 
-    advanceUntilRegex(regex: RegExp) {
+    public advanceUntilRegex(regex: RegExp) {
         const str = this._code.substring(this._position);
         const match = str.match(regex);
         if (match) {
