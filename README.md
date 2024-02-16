@@ -44,6 +44,7 @@ enum TokenKind {
     ELSE = 'else',
     WHILE = 'while',
     FOR = 'for',
+    SEMICOLON = ',',
 }
 
 const keywordMap: Record<string, TokenKind> = {
@@ -55,8 +56,8 @@ const keywordMap: Record<string, TokenKind> = {
 
 const tokenDefinitions: TokenDefinition<TokenKind>[] = [
     { regex: /if|else|while|for/, tokenMap: keywordMap },
-    { regex: /[a-zA-Z_][a-zA-Z0-9_]*/, kind: 'identifier' },
-    { regex: /\s+/, kind: 'whitespace' },
+    { regex: /[a-zA-Z_][a-zA-Z0-9_]*/, tokenMap: {}, kind: TokenKind.IDENTIFIER },
+    { regex: /\s+/, tokenMap: {}, kind: TokenKind.WHITESPACE },
     // ... more token definitions
 ];
 ```
