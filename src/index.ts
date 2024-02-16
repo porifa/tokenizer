@@ -138,4 +138,15 @@ export class Tokenizer<TokenKind> {
     private _isSkippable(type: TokenKind): boolean {
         return this._skippables.indexOf(type) !== -1;
     }
+
+    public static buildRegexFromSpecialCharacters(
+        specialChars: string[],
+        prefix: string = '',
+        suffix: string = '',
+        flags?: string | undefined
+    ): RegExp {
+        const escapedChars = specialChars.map((char) => char.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
+        const specialCharsPattern = escapedChars.join('|');
+        return new RegExp(`${prefix}(${specialCharsPattern})${suffix}`, flags);
+    }
 }
