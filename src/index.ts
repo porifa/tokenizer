@@ -65,7 +65,7 @@ export class Tokenizer<TokenKind> {
 
     nextToken(): Token<TokenKind> {
         if (this.isEndOfFile()) {
-            return Token.create(this._endOfFile, this._position, this._length - this._position);
+            return new Token(this._endOfFile, this._position, this._length - this._position);
         }
 
         for (const tokenDefinition of this._tokenDefinitions) {
@@ -90,7 +90,7 @@ export class Tokenizer<TokenKind> {
         }
         const pos = this._position;
         this._position++;
-        return Token.create(this._unrecognized, pos, this._position - pos);
+        return new Token(this._unrecognized, pos, this._position - pos);
     }
 
     advanceIfRegex(regex: RegExp): string {
@@ -132,7 +132,7 @@ export class Tokenizer<TokenKind> {
         const pos = this._position;
         this._position += matches[0].length;
 
-        return Token.create(kind, pos, matches[0].length);
+        return new Token(kind, pos, matches[0].length);
     }
 
     private _isSkippable(type: TokenKind): boolean {
